@@ -1,10 +1,44 @@
-# SuperMimic
+# ZeroMimic
 
-[Project page](https://supermimic.github.io) | [Paper](https://arxiv.org/abs/2610.28480)
+ZeroMimic is a research project for humanoid control without motion-capture
+demonstrations. It builds on [SuperMimic](https://github.com/HybridRobotics/supermimic)
+and its PyTorch, mjlab, and MuJoCo Warp stack.
 
-SuperMimic trains a humanoid whole-body motion tracker with one differentiable world model, built on [mjlab](https://github.com/mujocolab/mjlab).
+The design covers constrained get-up, a variable-clearance tunnel, and
+adjustable box traversal with a shared policy. See the
+[technical design](docs/zeromimic-design.md) for the task rules, training loop,
+and simulator integration.
 
-## Setup
+## Current scaffold
+
+- Task scene definitions and hard success and episode rules.
+- Physical replay and simulator contracts for pre-reset states and verified branches.
+- Mode-conditioned chunk CEM, projected gradient refinement, and ensemble return scoring.
+- A multi-mode policy, real-transition TD(λ) targets, verified distillation, and round orchestration.
+
+The scaffold runs with a supplied training backend. The concrete G1 scene
+builder, Warp adapter, learned dynamics training and checkpoint playback are
+planned integration work.
+
+Inspect the task configuration with Python 3.11 or newer:
+
+```bash
+PYTHONPATH=src python -m supermimic.scripts.train_zero --describe
+```
+
+Run the scaffold's CPU checks in a Python environment with PyTorch:
+
+```bash
+PYTHONPATH=src python -m unittest discover -s tests -p test_zeromimic.py
+```
+
+## Inherited SuperMimic tracking
+
+The original tracking tools use Python 3.13 and the sibling mjlab checkout.
+The upstream [project page](https://supermimic.github.io) and
+[paper](https://arxiv.org/abs/2610.28480) describe the tracking system.
+
+### Upstream motion-tracking setup
 
 Install [uv](https://docs.astral.sh/uv/):
 
@@ -16,12 +50,12 @@ Clone both repos as siblings:
 
 ```bash
 mkdir supermimic_ws && cd supermimic_ws
-git clone git@github.com:HybridRobotics/supermimic.git
+git clone https://github.com/xiaooai/ZeroMimic.git
 git clone git@github.com:HybridRobotics/mjlab_research.git
-cd supermimic
+cd ZeroMimic
 ```
 
-## Usage
+### Upstream motion-tracking usage
 
 Available task IDs:
 
